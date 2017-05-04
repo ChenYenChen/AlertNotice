@@ -90,35 +90,41 @@ class RYAlertNotice: NSObject {
         RYAlertNumber = RYAlertNumber + 1
         self.endTag = RYAlertNumber
         let thisTag = RYAlertNumber
+        // 容器
         let alertView = UIView(frame: self.viewRect)
         alertView.backgroundColor = UIColor.clear
         alertView.layer.cornerRadius = CGFloat(self.style.cornerRadius)
         alertView.layer.masksToBounds = true
         alertView.tag = RYAlertNumber
         
+        // 標題的View
         let titleRect = CGRect(x: 0, y: 0, width: alertView.bounds.width, height: alertView.bounds.height / 2)
         let titleView = UIView(frame: titleRect)
         titleView.backgroundColor = self.style.titleBackgroundColor
         
         var titleX: CGFloat = 15
+        // 判斷是否有圖片
         if let image = self.style.image {
-            let imageRect = CGRect(x: titleX, y: 5, width: 30, height: 30)
+            let imageRect = CGRect(x: titleX, y: 8, width: 30, height: 30)
             let alertImage: UIImageView = UIImageView(frame: imageRect)
+            alertImage.layer.cornerRadius = 5
+            alertImage.layer.masksToBounds = true
             alertImage.image = image
             titleX = titleX + 40
             titleView.addSubview(alertImage)
         }
+        // 標題
         let titleLabelRect = CGRect(x: titleX, y: 5, width: titleView.bounds.width - titleX - 15, height: 40)
         let alertTitleLabel: UILabel = UILabel(frame: titleLabelRect)
         alertTitleLabel.text = title
         alertTitleLabel.font = UIFont.boldSystemFont(ofSize: CGFloat(self.style.titleFont))
         titleView.addSubview(alertTitleLabel)
         alertView.addSubview(titleView)
-        
+        // 內容的View
         let messageRect = CGRect(x: 0, y: alertView.bounds.height / 2, width: alertView.bounds.width, height: alertView.bounds.height / 2)
         let messageView = UIView(frame: messageRect)
         messageView.backgroundColor = self.style.messageBackgroundColor
-        
+        // 內容
         let messageLabelRect = CGRect(x: 15, y: 0, width: titleView.bounds.width - 30, height: 40)
         let alertMessageLabel: UILabel = UILabel(frame: messageLabelRect)
         alertMessageLabel.text = message
@@ -126,28 +132,26 @@ class RYAlertNotice: NSObject {
         messageView.addSubview(alertMessageLabel)
         alertView.addSubview(messageView)
         
+        // 滑動
         let swipe = UISwipeGestureRecognizer(target: self, action: #selector(moveView(_:)))
         alertView.addGestureRecognizer(swipe)
-        
+        // 點擊
         let tap = UITapGestureRecognizer(target: self, action: #selector(touchView(_:)))
         alertView.addGestureRecognizer(tap)
         self.alertWin?.addSubview(alertView)
-        
+        // 聲音
         self.alertVoice()
-        
+        // 動作
         UIView.animate(withDuration: 0.5, animations: {
             alertView.frame.origin = CGPoint(x: 15, y: 25)
         }) { (finished) in
-            
+            // 移除自己底下的所有View
             for view in self.alertWin!.subviews {
                 if view.tag < thisTag {
                     view.removeFromSuperview()
                 }
             }
             
-            guard self.endTag == RYAlertNumber else {
-                return
-            }
             
             self.clearTimer?.invalidate()
             self.clearTimer = nil
@@ -155,20 +159,20 @@ class RYAlertNotice: NSObject {
             self.clearTimer = Timer.scheduledTimer(timeInterval: self.style.stayTime, target: self, selector: #selector(self.clearView), userInfo: nil, repeats: false)
         }
     }
-    
+    // 點擊
     @objc private func touchView(_ sender: UITapGestureRecognizer) {
-        print("ss")
+        
         if let com = self.complite {
             com()
         }
     }
-    
+    // 移動
     @objc private func moveView(_ sender: UISwipeGestureRecognizer) {
         if sender.direction == .up {
             self.clearView()
         }
     }
-    
+    // 清除 View
     @objc private func clearView() {
         for view in self.alertWin!.subviews {
             if view.tag == self.endTag {
@@ -183,7 +187,7 @@ class RYAlertNotice: NSObject {
             }
         }
     }
-    
+    // 移除Window
     @objc private func clearWin() {
         
         for win in UIApplication.shared.windows {

@@ -12,7 +12,9 @@ class ViewController: UIViewController {
     
     @IBAction func showAlert(_ sender: Any) {
         let alert = RYAlertNotice()
-        alert.show("通知", message: "這裡是通知啊~~   這裡是通知啊~~  這裡是通知啊~~   這裡是通知啊~~", style: nil) { 
+        var style = RYAlertStyle()
+        style.image = UIImage(named: "notice")
+        alert.show("通知", message: "這裡是通知啊~~   這裡是通知啊~~  這裡是通知啊~~   這裡是通知啊~~", style: style) { 
             print("就是要亂點!!")
         }
     }
