@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  AlertNotice
 //
-//  Created by 陳彥辰 on 2017/5/4.
+//  Created by Ray on 2017/5/4.
 //  Copyright © 2017年 Ray. All rights reserved.
 //
 
