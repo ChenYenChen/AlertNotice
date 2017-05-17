@@ -101,7 +101,6 @@ class RYAlertNotice: NSObject {
         let titleRect = CGRect(x: 0, y: 0, width: alertView.bounds.width, height: alertView.bounds.height / 2)
         let titleView = UIView(frame: titleRect)
         titleView.backgroundColor = self.style.titleBackgroundColor
-        
         var titleX: CGFloat = 15
         // 判斷是否有圖片
         if let image = self.style.image {
@@ -134,6 +133,7 @@ class RYAlertNotice: NSObject {
         
         // 滑動
         let swipe = UISwipeGestureRecognizer(target: self, action: #selector(moveView(_:)))
+        swipe.direction = .up
         alertView.addGestureRecognizer(swipe)
         // 點擊
         let tap = UITapGestureRecognizer(target: self, action: #selector(touchView(_:)))
@@ -165,6 +165,7 @@ class RYAlertNotice: NSObject {
         if let com = self.complite {
             com()
         }
+        self.clearWin()
     }
     // 移動
     @objc private func moveView(_ sender: UISwipeGestureRecognizer) {
